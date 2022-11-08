@@ -30,10 +30,10 @@ Endpoints - details of the APIs
 Questions API
 
 Return all questions
-GET http://127.0.0.1:8000/ 
-
-POST http://127.0.0.1:8000/questions
+GET http://127.0.0.1:8000/questions
 in the headers, you will need to include a valid Access-Code value
+
+POST http://127.0.0.1:8000/
 {
     "question": "Example question",
     "answer": "A",
