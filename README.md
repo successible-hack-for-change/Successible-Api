@@ -1,21 +1,22 @@
 # Successible-Api
 
+Pre Requisite:
+Python 3.10.4
+
 For windows to activate env
 1. Go into the Successible-Api repo then run commands
 python3 -m venv env
 Set-ExecutionPolicy Unrestricted -Scope Process
 env\Scripts\activate
-2. cd into the api folder
-py -m pip install -r requirements.txt 
+2. py -m pip install -r requirements.txt 
 
 For mac
 1. Go into the Successible-Api repo then run commands
 python3 -m venv env  
 source env/bin/activate
-2. cd into the api folder then run the following
-python3 -m pip install -r requirements.txt 
+2. python3 -m pip install -r requirements.txt 
 
-To run the app cd into the api folder and run the following commands
+To run the app:
 
 python3 manage.py makemigrations app
 python3 manage.py migrate app
@@ -31,7 +32,8 @@ Questions API
 Return all questions
 GET http://127.0.0.1:8000/ 
 
-POST http://127.0.0.1:8000/
+POST http://127.0.0.1:8000/questions
+in the headers, you will need to include a valid Access-Code value
 {
     "question": "Example question",
     "answer": "A",
