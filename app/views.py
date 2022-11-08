@@ -19,6 +19,22 @@ class QuestionList(generics.ListCreateAPIView):
 class QuestionDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Question.objects.all()
     serializer_class = QuestionSerializer
+    
+class CustomQuestionList(viewsets.ModelViewSet):
+    queryset = Question.objects.all()
+    serializer_class = QuestionSerializer
+    
+    @action(detail=True, methods=['get'])
+    def get_question_list(self, request, format=None, *args, **kwargs):
+        
+        accessCode = request.headers.get("Access-Code")
+        if accessCode == "test" or accessCode == "demo" or accessCode == "nKNjpC4P" or accessCode == "9k8ZE6g8":
+            query = Question.objects.all()
+            serializer = QuestionSerializer(query, many=True )
+            return Response(serializer.data)
+        return Response("Please check users access code",status=status.HTTP_404_NOT_FOUND )
+        
+        
 
 class UserList(generics.ListCreateAPIView):
     queryset = User.objects.all()
@@ -34,12 +50,12 @@ class UserDetailUtils(viewsets.ModelViewSet):
 
     def get_user(self, pk):
         try:
-            return User.objects.get(pk=pk)
+            return User.objects.get(id=pk)
         except User.DoesNotExist:
             raise Http404
 
     @action(detail=True, methods=['post'])
-    def get_user_id(self, request, format=None, *args, **kwargs, ):
+    def get_user_id(self, request, format=None, *args, **kwargs):
     
         username_req = request.data["username"]
         user_info = User.objects.get(username=username_req)
@@ -57,7 +73,7 @@ class UserDetailScore(viewsets.ModelViewSet):
 
     def get_user(self, pk):
         try:
-            return User.objects.get(pk=pk)
+            return User.objects.get(id=pk)
         except User.DoesNotExist:
             raise Http404
 
@@ -106,16 +122,22 @@ class QuestionResponseAPI(viewsets.ModelViewSet):
         reqUser = request.data['user']
         reqQuestion = request.data['questionId']
         reqCandidateAnswer = request.data['candidateAnswer']
+        
+        pk = self.kwargs.get('pk')
+        
+        if reqUser != pk:
+            return Response("User id and pk mismatch, please check and try again",status=status.HTTP_400_BAD_REQUEST)
 
-        if QuestionResponse.objects.filter(questionId=reqQuestion).filter(user=reqUser).count() is 0:
-            print("doesnt exist in db")
+        if QuestionResponse.objects.filter(questionId=reqQuestion).filter(user=reqUser).count() == 0:
+            print("QuestionResponse does not exist in db, question was not answered by user before")
             if self.check_result(reqQuestion, reqCandidateAnswer):
                 request.data['correct'] = True
             serializer = QuestionResponseSerializer(data=request.data)
             if serializer.is_valid():
                 serializer.save()
+                print("QuestionResponseSerializer is valid and saved")
                 return Response(serializer.data)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            else: return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         self.check_result(reqQuestion, reqCandidateAnswer)
         return Response("Error 412: a response for this question has already been received. Please check and try again", status=status.HTTP_412_PRECONDITION_FAILED)
 
@@ -126,7 +148,8 @@ class QuestionResponseAPI(viewsets.ModelViewSet):
         query = QuestionResponse.objects.filter(user=pk)
 
         correctAnswers = query.filter(correct=True).count()
-        user = User.objects.get(pk=pk)
+        print(pk)
+        user = User.objects.get(id=pk)
         user.score = user.set_score(correctAnswers)
         userSerial = UserSerializer(user, data={"score": user.score}, partial=True)
         if userSerial.is_valid():
@@ -137,15 +160,18 @@ class QuestionResponseAPI(viewsets.ModelViewSet):
         sortedQuery = query.order_by('questionId_id')
         print(sortedQuery)
 
-        n = f'Username: {user.get_username()}'
-        s = f'Score: {100.0 * user.score/sortedQuery.count()}%'
-        s3 = ""
+        if sortedQuery.count() != 0:
+            n = f'Username: {user.get_username()}'
+            s = f'Score: {100.0 * user.score/sortedQuery.count()}%'
+            s3 = ""
 
-        for i in sortedQuery:
-            s3 = '\n'.join([s3,f"Question {i.questionId.id} : {i.candidateAnswer}"])
+            for i in sortedQuery:
+                s3 = '\n'.join([s3,f"Question {i.questionId.id} : {i.candidateAnswer}"])
 
-        s4 = '\n'.join([n, s, s3])
-        print(s4)
-        
-        return Response(serializer.data)
+            s4 = '\n'.join([n, s, s3])
+            print(s4)
+            return Response(serializer.data)
+        elif sortedQuery.count() == 0:
+            return Response("Sorry an error has occurred, please check responses have been submitted or try again later", status=status.HTTP_412_PRECONDITION_FAILED)
+        return Response("Sorry an error has occurred, please try again later", status=HTTP_500_INTERNAL_SERVER_ERROR)
     
