@@ -5,7 +5,7 @@ Python 3.10.4
 
 For windows to activate env
 1. Go into the Successible-Api repo then run commands
-python3 -m venv env
+py -m venv env
 Set-ExecutionPolicy Unrestricted -Scope Process
 env\Scripts\activate
 2. py -m pip install -r requirements.txt 
@@ -16,7 +16,7 @@ python3 -m venv env
 source env/bin/activate
 2. python3 -m pip install -r requirements.txt 
 
-To run the app:
+To run the app (for windows replace python3 with py):
 
 python3 manage.py makemigrations app
 python3 manage.py migrate app
