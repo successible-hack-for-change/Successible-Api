@@ -1,8 +1,12 @@
 # Successible-Api
 
+*For demo purposes please go to the demo branch
+
+Pre Requisite: Python 3.10.4
+
 For windows to activate env
 1. Go into the Successible-Api repo then run commands
-python3 -m venv env
+py -m venv env
 Set-ExecutionPolicy Unrestricted -Scope Process
 env\Scripts\activate
 2. cd into the api folder
