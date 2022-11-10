@@ -5,7 +5,7 @@ This is the api for the Successible Project
 ### Pre-Requisite:
 Python 3.10.4
 
-In this project we used django, django rest framework. Please follow installation guide for running it locally
+In this project we used django, django rest framework. Please follow the installation guide below to run it locally
 
 ## Installation
 
