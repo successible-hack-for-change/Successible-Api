@@ -1,38 +1,59 @@
 # Successible-Api
 
-Pre Requisite:
+This is the api for the Successible Project
+
+### Pre-Requisite:
 Python 3.10.4
 
-For windows to activate env
-1. Go into the Successible-Api repo then run commands
-py -m venv env
-Set-ExecutionPolicy Unrestricted -Scope Process
-env\Scripts\activate
-2. py -m pip install -r requirements.txt 
+In this project we used django, django rest framework. Please follow installation guide for running it locally
 
-For mac
+## Installation
+
+### For windows to activate env
 1. Go into the Successible-Api repo then run commands
-python3 -m venv env  
-source env/bin/activate
-2. python3 -m pip install -r requirements.txt 
+```
+    py -m venv env
+    Set-ExecutionPolicy Unrestricted -Scope Process
+    env\Scripts\activate
+```
+```
+    py -m pip install -r requirements.txt
+```
+
+### For Mac
+1. Go into the Successible-Api repo then run commands:
+```
+    python3 -m venv env  
+    source env/bin/activate
+```
+```
+    python3 -m pip install -r requirements.txt 
+```
+
+## Running the api
 
 To run the app (for windows replace python3 with py):
 
-python3 manage.py makemigrations app
-python3 manage.py migrate app
-python3 manage.py migrate   
+```
+    python3 manage.py makemigrations app
+    python3 manage.py migrate app
+    python3 manage.py migrate   
 
-python3 manage.py runserver 
+    python3 manage.py runserver 
+```
 
+## Endpoints - details of the APIs
 
-Endpoints - details of the APIs
+### Questions API
 
-Questions API
+1. Return all questions:
 
-Return all questions
+    In the headers, you will need to include a valid Access-Code value
+```
 GET http://127.0.0.1:8000/questions
-in the headers, you will need to include a valid Access-Code value
-
+```
+2. To post a question:
+```
 POST http://127.0.0.1:8000/
 {
     "question": "Example question",
@@ -46,41 +67,51 @@ POST http://127.0.0.1:8000/
     "timeLimit": 120,
     "definitions": "defn"
 }
+```
 
-Users API
+### Users API
 
-List of all Users
+1. List of all Users
+```
 GET http://127.0.0.1:8000/users
+```
 
-Create user
+2. Create user
+```
 POST http://127.0.0.1:8000/users
 {
     "username" : "a",
     "email" : "a@email.com"
 }
+```
 
-View User Details
+3. View User Details
+```
 GET http://127.0.0.1:8000/user/<int:pk>
+```
 
-Question Responses API
+### Question Responses API
 
-To submit a response from the user
+1. To submit a response from the user
+```
 POST http://127.0.0.1:8000/user/<int:pk>/postresponse
 {
     "user" : 1,
     "questionId" : 5,
     "candidateAnswer" : "A"
 }
+```
 
-When the test finishes - this submits the form and calculates the score, where 1 is <int:pk>
+2. When the test finishes - this submits the form and calculates the score, where 1 is <int:pk>
+```
 GET http://127.0.0.1:8000/user/1/postresponse
+```
+### Notes for developing
 
-Notes
-
-In case:
-to retrieve userID by username
-
+1. To retrieve userID by username
+```
 POST http://127.0.0.1:8000/getuser
 {
     "username" : "a"
 }
+```
