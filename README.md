@@ -1,11 +1,13 @@
 # Successible-Api
 
-This is the api for the Successible Project
+This is the api for the Successible Project. Further details can be found at our front end repository https://github.com/successible-hack-for-change/successible
+
+This respository is for running locally and we have a different respository for the version deployed on GCP https://github.com/successible-hack-for-change/gcp-successible-api
 
 ### Pre-Requisite:
 Python 3.10.4
 
-In this project we used django, django rest framework. Please follow the installation guide below to run it locally
+In this project we used django and django rest framework. Please follow the installation guide below to run it locally
 
 ## Installation
 
