@@ -1,6 +1,8 @@
 # Successible-Api
 
-This is the api for the Successible Project
+This is the api for the Successible Project. Further details can be found at our front end repository https://github.com/successible-hack-for-change/successible
+
+This respository is for running locally and we have a different respository for the version deployed on GCP https://github.com/successible-hack-for-change/gcp-successible-api
 
 > Note: Please checkout the "demo" branch for the latest local version
 
